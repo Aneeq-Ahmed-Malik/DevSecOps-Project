@@ -23,6 +23,7 @@ pipeline {
         IMAGE_NAME         = 'netflix'
         DOCKERHUB_USERNAME = credentials('dockerhub-username')
         TMDB_API_KEY       = credentials('tmdb-api-key')
+        NVD_API_KEY        = credentials('nvd-api-key')
     }
 
     stages {
@@ -67,7 +68,7 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey ${NVD_API_KEY}', odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
