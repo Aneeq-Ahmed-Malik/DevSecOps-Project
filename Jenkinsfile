@@ -69,9 +69,9 @@ pipeline {
         stage('OWASP Dependency Check') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey ${NVD_API_KEY} --nvdApiDelay 4000', odcInstallation: 'DP-Check'
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml', failedTotalCritical: 0, unstableTotalCritical: 0
             }
         }
 
